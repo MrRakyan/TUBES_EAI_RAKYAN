@@ -1,0 +1,32 @@
+enum PaymentMethod {
+  BANK_TRANSFER
+  E_WALLET
+  CREDIT_CARD
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+type TopUpTransaction {
+  id: Int!
+  userId: String!
+  amount: Int!
+  method: PaymentMethod!
+  status: PaymentStatus!
+  createdAt: String!
+}
+
+type Mutation {
+  topUpWallet(
+    userId: String!
+    amount: Int!
+    method: PaymentMethod!
+  ): TopUpTransaction
+}
+
+type Query {
+  topUpTransactionsByUser(userId: String!): [TopUpTransaction!]!
+}
