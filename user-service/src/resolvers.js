@@ -7,12 +7,14 @@ export const resolvers = {
     _health: () => "OK",
 
     users: async () => {
+      console.log("👤 [User Service] Ambil semua user");
       return prisma.user.findMany({
         orderBy: { createdAt: "desc" },
       });
     },
 
     userById: async (_, { id }) => {
+      console.log("👤 [User Service] Cek user by ID:", id);
       return prisma.user.findUnique({
         where: { id },
       });
@@ -23,38 +25,26 @@ export const resolvers = {
     createUser: async (_, args) => {
       const { id, name, email, phone } = args;
 
-      // =========================
-      // 1️⃣ BASIC VALIDATION
-      // =========================
+      console.log("➕ [User Service] Create user:", id);
+
       if (!id || !name || !email) {
         throw new Error("id, name, dan email wajib diisi");
       }
 
-      // =========================
-      // 2️⃣ CEK DUPLICATE ID
-      // =========================
       const existingById = await prisma.user.findUnique({
         where: { id },
       });
-
       if (existingById) {
         throw new Error("User dengan ID ini sudah ada");
       }
 
-      // =========================
-      // 3️⃣ CEK DUPLICATE EMAIL
-      // =========================
       const existingByEmail = await prisma.user.findUnique({
         where: { email },
       });
-
       if (existingByEmail) {
         throw new Error("Email sudah terdaftar");
       }
 
-      // =========================
-      // 4️⃣ CREATE USER
-      // =========================
       return prisma.user.create({
         data: {
           id,
