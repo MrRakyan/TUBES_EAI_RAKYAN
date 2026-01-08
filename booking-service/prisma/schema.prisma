@@ -1,0 +1,29 @@
+generator client {
+  provider      = "prisma-client-js"
+  // Tambahkan baris di bawah ini:
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Model Tabel Booking
+model Booking {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  movieId    Int
+  seatNumber String
+  totalPrice Int
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime @default(now())
+
+  @@unique([movieId, seatNumber]) // ⬅️ INI KUNCINYA
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+}

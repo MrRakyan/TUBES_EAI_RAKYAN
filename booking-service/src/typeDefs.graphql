@@ -1,0 +1,41 @@
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+type Movie {
+  id: Int
+  title: String
+  duration: Int
+  rating: Float
+}
+
+type Booking {
+  id: Int
+  userId: String
+  movieId: Int
+  seatNumber: String
+  totalPrice: Float
+  status: BookingStatus
+  movie: Movie
+}
+
+type Query {
+  bookings: [Booking]
+  booking(id: Int!): Booking
+}
+
+type Mutation {
+  createBooking(
+    userId: String!
+    movieId: Int!
+    seatNumber: String!
+    totalPrice: Float!
+  ): Booking
+
+  updateBookingStatus(
+    id: Int!
+    status: BookingStatus!
+  ): Booking
+}
