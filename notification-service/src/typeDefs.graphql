@@ -1,0 +1,11 @@
+type Notification {
+  id: Int
+  bookingId: Int
+  userId: String
+  message: String
+  type: String
+}
+
+type Query {
+  notificationByBooking(bookingId: Int!): Notification
+}

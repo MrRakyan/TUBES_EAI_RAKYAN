@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  bookingId Int
+  userId    String
+  message   String
+  type      NotificationType
+  createdAt DateTime @default(now())
+}
+
+enum NotificationType {
+  PAYMENT_PENDING
+  PAYMENT_SUCCESS
+}
