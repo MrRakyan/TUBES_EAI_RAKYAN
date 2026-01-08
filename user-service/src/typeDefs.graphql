@@ -1,0 +1,22 @@
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String
+  createdAt: String
+}
+
+type Query {
+  _health: String
+  users: [User]
+  userById(id: String!): User
+}
+
+type Mutation {
+  createUser(
+    id: String!
+    name: String!
+    email: String!
+    phone: String
+  ): User
+}

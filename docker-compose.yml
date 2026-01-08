@@ -1,0 +1,291 @@
+version: "3.8"
+
+services:
+  # ======================
+  # MOVIE DATABASE
+  # ======================
+  movie-db:
+    image: mysql:8
+    container_name: movie-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: movie_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - movie-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # MOVIE SERVICE
+  # ======================
+  movie-service:
+    build: ./movie-service
+    container_name: movie-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@movie-db:3306/movie_db"
+    depends_on:
+      movie-db:
+        condition: service_healthy
+    ports:
+      - "5001:4000"
+
+  # ======================
+  # BOOKING DATABASE
+  # ======================
+  booking-db:
+    image: mysql:8
+    container_name: booking-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: booking_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - booking-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # BOOKING SERVICE
+  # ======================
+  booking-service:
+    build: ./booking-service
+    container_name: booking-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@booking-db:3306/booking_db"
+      MOVIE_SERVICE_URL: "http://movie-service:4000/graphql"
+    depends_on:
+      booking-db:
+        condition: service_healthy
+      movie-service:
+        condition: service_started
+    ports:
+      - "5002:4000"
+
+  # ======================
+  # NOTIFICATION DATABASE
+  # ======================
+  notification-db:
+    image: mysql:8
+    container_name: notification-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: notification_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - notification-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # NOTIFICATION SERVICE
+  # ======================
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@notification-db:3306/notification_db"
+    depends_on:
+      notification-db:
+        condition: service_healthy
+    ports:
+      - "5003:4000"
+
+  # ======================
+  # USER DATABASE
+  # ======================
+  user-db:
+    image: mysql:8
+    container_name: user-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: user_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - user-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # USER SERVICE
+  # ======================
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@user-db:3306/user_db"
+    depends_on:
+      user-db:
+        condition: service_healthy
+    ports:
+      - "5004:4000"
+
+  # ======================
+  # WALLET DATABASE
+  # ======================
+  wallet-db:
+    image: mysql:8
+    container_name: wallet-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: wallet_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - wallet-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # WALLET SERVICE
+  # ======================
+  wallet-account-service:
+    build: ./wallet-account-service
+    container_name: wallet-account-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@wallet-db:3306/wallet_db"
+    depends_on:
+      wallet-db:
+        condition: service_healthy
+    ports:
+      - "5005:4000"
+
+  # ======================
+  # PAYMENT-GATEWAY DATABASE
+  # ======================
+  payment-db:
+    image: mysql:8
+    container_name: payment-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: payment_gateway_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - payment-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # PAYMENT-GATEWAY-SERVICE
+  # ======================
+  payment-gateway-service:
+    build: ./payment-gateway-service
+    container_name: payment-gateway-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@payment-db:3306/payment_gateway_db"
+      WALLET_SERVICE_URL: "http://wallet-account-service:4000/graphql"
+    depends_on:
+      payment-db:
+        condition: service_healthy
+    ports:
+      - "5006:4000"
+
+
+  # ======================
+  # PAYMENT DATABASE
+  # ======================
+  payment-transaction-db:
+    image: mysql:8
+    container_name: payment-transaction-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: payment_transaction_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - payment-transaction-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # PAYMENT SERVICE
+  # ======================
+  payment-transaction-service:
+    build: ./payment-transaction-service
+    container_name: payment-transaction-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@payment-transaction-db:3306/payment_transaction_db"
+      WALLET_SERVICE_URL: "http://wallet-account-service:4000/graphql"
+      BOOKING_SERVICE_URL: "http://booking-service:4000/graphql"
+      HISTORY_SERVICE_URL: "http://history-payment-service:4000/graphql"
+    depends_on:
+      payment-transaction-db:
+        condition: service_healthy
+    ports:
+      - "5007:4000"    
+
+  # ======================
+  # HISTORY PAYMENT DATABASE
+  # ======================
+  history-payment-db:
+    image: mysql:8
+    container_name: history-payment-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: history_payment_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - history-payment-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================
+  # HISTORY PAYMENT SERVICE
+  # ======================
+  history-payment-service:
+    build: ./history-payment-service
+    container_name: history-payment-service
+    environment:
+      DATABASE_URL: "mysql://user:pass@history-payment-db:3306/history_payment_db"
+    depends_on:
+      history-payment-db:
+        condition: service_healthy
+    ports:
+      - "5008:4000"
+
+
+
+# ======================
+# VOLUMES
+# ======================
+volumes:
+  movie-db-data:
+  booking-db-data:
+  notification-db-data:
+  user-db-data:
+  wallet-db-data:
+  payment-db-data:
+  payment-transaction-db-data:
+  history-payment-db-data:
