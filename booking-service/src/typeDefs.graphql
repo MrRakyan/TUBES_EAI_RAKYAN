@@ -9,6 +9,7 @@ type Movie {
   title: String
   duration: Int
   rating: Float
+  price: Int
 }
 
 type Booking {
@@ -16,7 +17,7 @@ type Booking {
   userId: String
   movieId: Int
   seatNumber: String
-  totalPrice: Float
+  totalPrice: Int
   status: BookingStatus
   movie: Movie
 }
@@ -31,7 +32,6 @@ type Mutation {
     userId: String!
     movieId: Int!
     seatNumber: String!
-    totalPrice: Float!
   ): Booking
 
   updateBookingStatus(
