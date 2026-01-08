@@ -1,0 +1,34 @@
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+}
+
+type PaymentHistory {
+  id: Int!
+  transactionId: Int!
+  bookingId: Int!
+  userId: String!
+  seatNumber: String
+  amount: Int!
+  method: String!
+  status: PaymentStatus!
+  createdAt: String!
+}
+
+type Query {
+  paymentHistoryByUser(userId: String!): [PaymentHistory!]!
+  paymentHistoryByBooking(bookingId: Int!): [PaymentHistory!]!
+  paymentHistoryById(id: Int!): PaymentHistory
+}
+
+type Mutation {
+  createHistory(
+    transactionId: Int!
+    bookingId: Int!
+    userId: String!
+    seatNumber: String
+    amount: Int!
+    method: String
+    status: PaymentStatus!
+  ): PaymentHistory!
+}

@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+}
+
+model PaymentHistory {
+  id            Int           @id @default(autoincrement())
+  transactionId Int           @unique
+  bookingId     Int
+  userId        String
+  seatNumber    String?
+  amount        Int
+  method        String        @default("WALLET")
+  status        PaymentStatus
+  createdAt     DateTime      @default(now())
+
+  @@index([userId])
+  @@index([bookingId])
+}
