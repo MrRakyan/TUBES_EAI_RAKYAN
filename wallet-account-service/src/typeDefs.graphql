@@ -1,0 +1,14 @@
+type Wallet {
+  userId: String!
+  balance: Int!
+}
+
+type Query {
+  walletByUser(userId: String!): Wallet
+}
+
+type Mutation {
+  createWallet(userId: String!): Wallet
+  increaseBalance(userId: String!, amount: Int!): Wallet
+  decreaseBalance(userId: String!, amount: Int!): Wallet
+}
