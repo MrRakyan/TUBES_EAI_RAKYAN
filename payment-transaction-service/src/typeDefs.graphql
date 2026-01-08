@@ -1,0 +1,28 @@
+enum TransactionStatus {
+  SUCCESS
+  FAILED
+}
+
+type Transaction {
+  id: Int!
+  bookingId: Int!
+  userId: String!
+  amount: Int!
+  seatNumber: String
+  status: TransactionStatus!
+  createdAt: String!
+}
+
+type Query {
+  transactionById(id: Int!): Transaction
+  # convenience alias for clients that query `id` at root
+  id(id: Int!): Transaction
+  transactionsByUser(userId: String!): [Transaction!]!
+}
+
+type Mutation {
+  payBooking(
+    bookingId: Int!
+    userId: String!
+  ): Transaction
+}
