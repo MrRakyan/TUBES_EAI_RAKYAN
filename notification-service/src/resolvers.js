@@ -6,9 +6,13 @@ const prisma = new PrismaClient();
 export const resolvers = {
   Query: {
     notificationByBooking: async (_, { bookingId }) => {
-      // 1. Ambil data booking dari booking-service
+      console.log(
+        "🔔 [Notification Service] Ambil booking dari Booking Service:",
+        bookingId
+      );
+
       const response = await fetch(
-        `http://booking-service:4000/graphql`,
+        "http://booking-service:4000/graphql",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -21,7 +25,7 @@ export const resolvers = {
                   status
                 }
               }
-            `
+            `,
           }),
         }
       );
@@ -31,7 +35,6 @@ export const resolvers = {
 
       if (!booking) throw new Error("Booking tidak ditemukan");
 
-      // 2. Tentukan pesan berdasarkan status
       let message = "";
       let type = "";
 
@@ -41,11 +44,18 @@ export const resolvers = {
       }
 
       if (booking.status === "PAID") {
-        message = "Pembayaran berhasil. Terima kasih telah melakukan pemesanan.";
+        message =
+          "Pembayaran berhasil. Terima kasih telah melakukan pemesanan.";
         type = "PAYMENT_SUCCESS";
       }
 
-      // 3. Simpan notifikasi
+      console.log(
+        "✅ [Notification Service] Notifikasi dibuat untuk booking:",
+        bookingId,
+        "| Type:",
+        type
+      );
+
       return prisma.notification.create({
         data: {
           bookingId: booking.id,
