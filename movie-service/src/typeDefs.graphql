@@ -1,0 +1,21 @@
+type Movie {
+  id: Int
+  title: String
+  genre: String
+  duration: Int
+  rating: Float
+}
+
+type Query {
+  movies: [Movie]
+  movieById(id: Int!): Movie
+}
+
+type Mutation {
+  addMovie(
+    title: String!
+    genre: String!
+    duration: Int!
+    rating: Float!
+  ): Movie
+}

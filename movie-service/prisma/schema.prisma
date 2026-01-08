@@ -1,0 +1,18 @@
+generator client {
+  provider      = "prisma-client-js"
+  // Tambahkan baris di bawah ini:
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id        Int     @id @default(autoincrement())
+  title     String
+  genre     String
+  duration  Int
+  rating    Float
+}
