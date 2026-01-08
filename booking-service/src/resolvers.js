@@ -9,6 +9,8 @@ const prisma = new PrismaClient();
  * =========================
  */
 async function checkUserFromUserService(userId) {
+  console.log("📡 [Booking Service] Validasi user ke User Service:", userId);
+
   const response = await fetch(process.env.USER_SERVICE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -25,8 +27,13 @@ async function checkUserFromUserService(userId) {
   });
 
   const result = await response.json();
-  if (result.errors || !result.data?.userById) return null;
 
+  if (result.errors || !result.data?.userById) {
+    console.log("❌ [Booking Service] User tidak ditemukan");
+    return null;
+  }
+
+  console.log("✅ [Booking Service] User valid:", userId);
   return result.data.userById;
 }
 
@@ -36,6 +43,8 @@ async function checkUserFromUserService(userId) {
  * =========================
  */
 async function getMovieFromMovieService(movieId) {
+  console.log("🎬 [Booking Service] Ambil data movie dari Movie Service:", movieId);
+
   const response = await fetch(process.env.MOVIE_SERVICE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -55,7 +64,18 @@ async function getMovieFromMovieService(movieId) {
   });
 
   const result = await response.json();
-  if (result.errors || !result.data?.movieById) return null;
+
+  if (result.errors || !result.data?.movieById) {
+    console.log("❌ [Booking Service] Movie tidak ditemukan:", movieId);
+    return null;
+  }
+
+  console.log(
+    "✅ [Booking Service] Movie ditemukan:",
+    result.data.movieById.title,
+    "| Price:",
+    result.data.movieById.price
+  );
 
   return result.data.movieById;
 }
@@ -82,6 +102,8 @@ export const resolvers = {
   // =========================
   Mutation: {
     createBooking: async (_, { userId, movieId, seatNumber }) => {
+      console.log("📝 [Booking Service] Create booking dimulai");
+
       // 1️⃣ Validasi User
       const user = await checkUserFromUserService(userId);
       if (!user) throw new Error("User tidak ditemukan");
@@ -92,6 +114,10 @@ export const resolvers = {
       });
 
       if (existingSeat) {
+        console.log(
+          "❌ [Booking Service] Seat sudah dibooking:",
+          seatNumber
+        );
         throw new Error(`Seat ${seatNumber} sudah dibooking`);
       }
 
@@ -99,8 +125,8 @@ export const resolvers = {
       const movie = await getMovieFromMovieService(movieId);
       if (!movie) throw new Error("Movie tidak ditemukan");
 
-      // 4️⃣ Simpan booking (snapshot harga)
-      return prisma.booking.create({
+      // 4️⃣ Simpan booking
+      const booking = await prisma.booking.create({
         data: {
           userId,
           movieId,
@@ -109,9 +135,23 @@ export const resolvers = {
           status: "PENDING",
         },
       });
+
+      console.log(
+        "✅ [Booking Service] Booking berhasil dibuat:",
+        booking.id
+      );
+
+      return booking;
     },
 
     updateBookingStatus: async (_, { id, status }) => {
+      console.log(
+        "🔄 [Booking Service] Update status booking:",
+        id,
+        "→",
+        status
+      );
+
       const booking = await prisma.booking.findUnique({ where: { id } });
       if (!booking) throw new Error("Booking tidak ditemukan");
 
