@@ -62,6 +62,8 @@ services:
     environment:
       DATABASE_URL: "mysql://user:pass@booking-db:3306/booking_db"
       MOVIE_SERVICE_URL: "http://movie-service:4000/graphql"
+      NOTIFICATION_SERVICE_URL: "http://notification-service:4000/graphql"
+      USER_SERVICE_URL: "http://user-service:4000/graphql"
     depends_on:
       booking-db:
         condition: service_healthy
