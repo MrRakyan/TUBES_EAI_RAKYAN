@@ -15,7 +15,7 @@ export const resolvers = {
         where: { userId },
         orderBy: { createdAt: "desc" },
       });
-
+      
       console.log(
         "✅ [Notification Service] Ditemukan",
         notifications.length,
