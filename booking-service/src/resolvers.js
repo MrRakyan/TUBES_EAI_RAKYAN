@@ -141,6 +141,45 @@ export const resolvers = {
         booking.id
       );
 
+      // 5️⃣ Buat notification otomatis
+      console.log("📢 [Booking Service] Membuat notification untuk user:", userId);
+      const notificationServiceUrl = process.env.NOTIFICATION_SERVICE_URL || "http://notification-service:4000/graphql";
+      
+      try {
+        const notifResponse = await fetch(notificationServiceUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: `
+              mutation ($bookingId: Int!, $userId: String!, $message: String!, $type: String!) {
+                createNotification(bookingId: $bookingId, userId: $userId, message: $message, type: $type) {
+                  id
+                  userId
+                  message
+                  type
+                }
+              }
+            `,
+            variables: {
+              bookingId: booking.id,
+              userId,
+              message: "Segera lakukan pembayaran untuk menyelesaikan pesanan.",
+              type: "PAYMENT_PENDING",
+            },
+          }),
+        });
+        
+        const notifResult = await notifResponse.json();
+        
+        if (notifResult.errors) {
+          console.log("❌ [Booking Service] GraphQL Error:", notifResult.errors);
+        } else {
+          console.log("✅ [Booking Service] Notification berhasil dibuat:", notifResult.data?.createNotification?.id);
+        }
+      } catch (error) {
+        console.log("⚠️ [Booking Service] Gagal membuat notification:", error.message);
+      }
+
       return booking;
     },
 
