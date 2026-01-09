@@ -4,8 +4,13 @@ type Notification {
   userId: String
   message: String
   type: String
+  createdAt: String
 }
 
 type Query {
-  notificationByBooking(bookingId: Int!): Notification
+  notificationsByUser(userId: String!): [Notification]
+}
+
+type Mutation {
+  createNotification(bookingId: Int!, userId: String!, message: String!, type: String!): Notification
 }
