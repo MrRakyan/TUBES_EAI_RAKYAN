@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket System - Microservices</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .service-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .service-card h2 {
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            color: #4a4a4a;
+        }
+        .service-card p {
+            font-size: 1em;
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+        .footer {
+            margin-top: 40px;
+            color: white;
+            text-align: center;
+            opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .service-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎬 Movie Ticket System</h1>
+        <p>Manage your microservices with ease</p>
+    </div>
+    <div class="services-grid">
+        <a href="user.html" class="service-card">
+            <span class="service-icon">👤</span>
+            <h2>User Service</h2>
+            <p>Manage user accounts, registration, and profiles. View and add new users to the system.</p>
+        </a>
+        <a href="movie.html" class="service-card">
+            <span class="service-icon">🎥</span>
+            <h2>Movie Service</h2>
+            <p>Add and view available movies. Manage movie catalog with details like genre, rating, and price.</p>
+        </a>
+        <a href="booking.html" class="service-card">
+            <span class="service-icon">🎫</span>
+            <h2>Booking Service</h2>
+            <p>Create and view movie ticket bookings. Check available movies and seats before booking.</p>
+        </a>
+        <a href="wallet.html" class="service-card">
+            <span class="service-icon">💰</span>
+            <h2>Wallet Service</h2>
+            <p>Manage user wallets. Top up balance or withdraw funds for payments.</p>
+        </a>
+        <a href="payment.html" class="service-card">
+            <span class="service-icon">💳</span>
+            <h2>Payment Service</h2>
+            <p>Process payments for bookings. View transaction history and payment status.</p>
+        </a>
+        <a href="gateway.html" class="service-card">
+            <span class="service-icon">🏦</span>
+            <h2>Payment Gateway</h2>
+            <p>Handle external payments and top-ups. View gateway transactions and methods.</p>
+        </a>
+        <a href="notification.html" class="service-card">
+            <span class="service-icon">📢</span>
+            <h2>Notification Service</h2>
+            <p>Send and check notifications. View booking-related alerts and messages.</p>
+        </a>
+        <a href="history.html" class="service-card">
+            <span class="service-icon">📊</span>
+            <h2>Payment History</h2>
+            <p>View detailed payment history. Search by user, booking, or transaction ID.</p>
+        </a>
+    </div>
+    <div class="footer">
+        <p>Built with ❤️ using Node.js, GraphQL, and Docker</p>
+    </div>
+</body>
+</html>

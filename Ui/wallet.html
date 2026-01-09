@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        #wallet-balance {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .withdraw-btn {
+            background-color: #f44336;
+        }
+        .withdraw-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Wallet Service</h2>
+        <h3>Create New Wallet</h3>
+        <form id="createWalletForm">
+            <input id="createUserId" placeholder="User ID" required>
+            <button type="submit">Create Wallet</button>
+        </form>
+        <hr>
+        <h3>Load Wallet</h3>
+        <form id="selectWalletForm">
+            <input id="selectUserId" placeholder="User ID" required>
+            <button type="submit">Load Wallet</button>
+        </form>
+        <div id="wallet-balance">Balance: $0</div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
