@@ -141,7 +141,7 @@ export const resolvers = {
         booking.id
       );
 
-      // 5️⃣ Buat notification otomatis
+      // 5️⃣ Buat notification otomatis//
       console.log("📢 [Booking Service] Membuat notification untuk user:", userId);
       const notificationServiceUrl = process.env.NOTIFICATION_SERVICE_URL || "http://notification-service:4000/graphql";
       
